@@ -114,7 +114,7 @@ export default function App() {
     const fetchWildfireData = async (stateAbbreviation) => {
       try {
         console.log("abbrev: " + stateAbbreviation);
-        const response = await fetch(`./outdata/${stateAbbreviation}.csv`);
+        const response = await fetch(`./outdata-short/${stateAbbreviation}.csv`);
         const data = await response.text();
         console.log(data);
         const parsedData = parseCSV(data);
