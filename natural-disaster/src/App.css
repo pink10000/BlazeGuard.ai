@@ -156,3 +156,32 @@
     transform: rotate(360deg);
   }
 }
+
+/* Add these styles to your CSS file */
+.pulse-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulse-ring {
+  width: 100%; /* Adjust the size of the pulsating circle to match the icon size */
+  height: 100%; /* Adjust the size of the pulsating circle to match the icon size */
+  background-color: rgba(255, 0, 0, 0.5); /* Solid red color with 50% opacity */
+  border-radius: 50%;
+  animation: pulsate 1s infinite; /* Change animation duration as needed */
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(0.1);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.50;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}

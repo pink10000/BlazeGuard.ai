@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
-import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
@@ -21,12 +20,21 @@ const maxBounds = [
 ];
 
 function WildfireLayer({ wildfireData }) {
-  const fireMarkerIcon = L.icon({
-    iconUrl: fireIcon,
-    iconSize: [32, 32], // Adjust the size of the icon as needed
-    iconAnchor: [16, 32], // Position the icon's anchor point
-    popupAnchor: [0, -32] // Position the popup relative to the icon
+  const pulseIcon = L.divIcon({
+    className: 'pulse-icon',
+    html: `<div class="pulse-ring"></div>`,
+    iconSize: [50, 50], // Adjust the size of the pulsating circle as needed
   });
+
+  const [selectedFireData, setSelectedFireData] = useState(null);
+
+  const handleMarkerClick = (fireData) => {
+    setSelectedFireData(fireData);
+  };
+
+  const handleMarkerClose = () => {
+    setSelectedFireData(null);
+  };
 
   return (
     <MarkerClusterGroup
@@ -46,16 +54,29 @@ function WildfireLayer({ wildfireData }) {
       ">
           ${cluster.getChildCount()}
       </div>`,
-          className: 'mycluster', iconSize: L.point(40,40)});
+          className: 'mycluster', iconSize: L.point(40, 40)
+        });
       }}
     >
       {wildfireData.map((wildfire, index) => (
-        <Marker key={index} position={wildfire} icon={fireMarkerIcon}>
+        <Marker key={index} position={wildfire} icon={pulseIcon} eventHandlers={{ mouseover: () => handleMarkerClick(wildfire), mouseout: handleMarkerClose }}>
+          {selectedFireData && selectedFireData[0] === wildfire[0] && selectedFireData[1] === wildfire[1] && (
+            <Popup>
+              <div>
+                <p>GPS Location: ({wildfire[0]}, {wildfire[1]})</p>
+                <p>Area Burned: {wildfire[2]} Acres</p>
+                {/* Add more metadata fields here */}
+              </div>
+            </Popup>
+          )}
         </Marker>
       ))}
     </MarkerClusterGroup>
   );
 }
+
+
+
 
 function StatePolygon({ state, selected, onClick }) {
   const map = useMap();
@@ -123,8 +144,8 @@ export default function App() {
   useEffect(() => {
     const fetchWildfireData = async (stateAbbreviation) => {
       try {
-        console.log("abbrev: " + stateAbbreviation);
-        const response = await fetch(`./outdata-short/${stateAbbreviation}.csv`);
+        // console.log("abbrev: " + stateAbbreviation);
+        const response = await fetch(`./outdata-short-with-metadata/${stateAbbreviation}.csv`);
         const data = await response.text();
         const parsedData = parseCSV(data);
         setWildfireData(parsedData);
@@ -135,17 +156,22 @@ export default function App() {
 
     if (selectedState !== null) {
       const stateAbbreviation = stateAbbreviations[statesData.features[selectedState].properties.name];
-      console.log(stateAbbreviation)
+      // console.log(stateAbbreviation)
       fetchWildfireData(stateAbbreviation);
     }
   }, [selectedState]);
 
   const parseCSV = (csvString) => {
     return csvString.split('\n').map(line => {
-      const [latitude, longitude] = line.split(',').map(parseFloat);
-      return [latitude, longitude];
+      const [latitude, longitude, fireSize] = line.split(',');
+      const parsedLatitude = parseFloat(latitude);
+      const parsedLongitude = parseFloat(longitude);
+      const parsedFireSize = parseFloat(fireSize);
+      return [parsedLatitude, parsedLongitude, parsedFireSize];
     });
   };
+  
+  
 
   const [mapType, setMapType] = useState("Satellite");
 

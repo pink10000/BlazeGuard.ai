@@ -1,4 +1,6 @@
 data
 .venv
+img/token.txt
+img/api_dump/*
 # Nix result
 /result
