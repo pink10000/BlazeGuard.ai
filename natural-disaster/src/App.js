@@ -1,22 +1,18 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon, useMap, Marker, Popup} from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMap, Marker} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
-import fireIcon from './img/fire-icon.png'
+import fireIcon from './img/fire-icon-small.png';
+import latLongPairs from "./latLongPairs";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
   [24.396308, -125.0],
   [49.384358, -66.93457],
-];
-
-// Sample wildfire data
-const wildfireData = [
-  { position: [41.634, -98.899], name: "Wildfire 1" },
-  { position: [39.634, -96.899], name: "Wildfire 2" },
-  // Add more wildfire data as needed
 ];
 
 function WildfireLayer() {
@@ -28,13 +24,31 @@ function WildfireLayer() {
   });
 
   return (
-    <>
-      {wildfireData.map((wildfire, index) => (
-        <Marker key={index} position={wildfire.position} icon={fireMarkerIcon}>
-          <Popup>{wildfire.name}</Popup>
+    <MarkerClusterGroup
+      iconCreateFunction={(cluster) => {
+        return L.divIcon({
+          html: `<div style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px; /* Match the iconSize height */
+          width: 40px; /* Match the iconSize width */
+          background-color: orange;
+          color: black;
+          font-size: 16px; /* Or any size that fits your design */
+          font-weight: bold;
+          border-radius: 50%; /* Optional: if you want the square to be a circle */
+      ">
+          ${cluster.getChildCount()}
+      </div>`,
+          className: 'mycluster', iconSize: L.point(40,40)});
+      }}
+    >
+      {latLongPairs.map((wildfire, index) => (
+        <Marker key={index} position={wildfire} icon={fireMarkerIcon}>
         </Marker>
       ))}
-    </>
+    </MarkerClusterGroup>
   );
 }
 

@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.mycluster {
+  transition: transform 0.3s ease-out; /* Animates the scale transformation */
+}
+
+.mycluster.spiderfied {
+  transform: scale(1.5); /* Enlarges the cluster when spiderfying */
+}
+
+/* Optional: You can add animations for when markers are added to or removed from clusters */
+.leaflet-marker-icon {
+  transition: opacity 0.3s ease-out;
+}
+
+.marker-hidden {
+  opacity: 0;
+}
