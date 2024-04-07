@@ -3,16 +3,15 @@ import { MapContainer, TileLayer, Polygon, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
-import L from 'leaflet';
+import L from "leaflet";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
   [24.396308, -125.0],
-  [49.384358, -66.93457] 
+  [49.384358, -66.93457],
 ];
 
-function StatePolygon({ state }) {
-
+function StatePolygon({ state, selected, onClick }) {
   const map = useMap();
   const coordinates = state.geometry.coordinates[0].map((item) => [
     item[1],
@@ -22,6 +21,7 @@ function StatePolygon({ state }) {
   const handleClick = () => {
     const bounds = L.latLngBounds(coordinates);
     map.fitBounds(bounds);
+    onClick(); // onClick to allow states to be selected
   };
 
   return (
@@ -30,7 +30,7 @@ function StatePolygon({ state }) {
         fillOpacity: 0.7,
         opacity: 1,
         color: "white",
-        fillColor: "#007bff",
+        fillColor: selected ? "#ADD8E6" : "#007bff",
         weight: 2,
         dashArray: 3,
       }}
@@ -53,7 +53,7 @@ function StatePolygon({ state }) {
             weight: 2,
             dashArray: "3",
             color: "white",
-            fillColor: "#007bff",
+            fillColor: selected ? "#ADD8E6" : "#007bff",
             fillOpacity: 0.7,
           });
         },
@@ -63,8 +63,9 @@ function StatePolygon({ state }) {
   );
 }
 
-
 export default function App() {
+  const [selectedState, setSelectedState] = useState(null);
+
   return (
     <MapContainer
       center={center}
@@ -78,7 +79,12 @@ export default function App() {
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
       />
       {statesData.features.map((state, index) => (
-        <StatePolygon key={index} state={state} />
+        <StatePolygon
+          key={index}
+          state={state}
+          selected={index === selectedState}
+          onClick={() => setSelectedState(index)}
+        />
       ))}
     </MapContainer>
   );
