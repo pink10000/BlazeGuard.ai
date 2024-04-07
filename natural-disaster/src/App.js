@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl} from "react-leaflet";
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
 import fireIcon from './img/fire-icon-small.png';
-import latLongPairs from "./latLongPairs";
 import MarkerClusterGroup from "react-leaflet-markercluster";
+import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
 
 const center = [40.63463151377654, -97.89969605983609];
@@ -15,7 +15,7 @@ const maxBounds = [
   [49.384358, -66.93457],
 ];
 
-function WildfireLayer() {
+function WildfireLayer({ wildfireData }) {
   const fireMarkerIcon = L.icon({
     iconUrl: fireIcon,
     iconSize: [32, 32], // Adjust the size of the icon as needed
@@ -44,7 +44,7 @@ function WildfireLayer() {
           className: 'mycluster', iconSize: L.point(40,40)});
       }}
     >
-      {latLongPairs.map((wildfire, index) => (
+      {wildfireData.map((wildfire, index) => (
         <Marker key={index} position={wildfire} icon={fireMarkerIcon}>
         </Marker>
       ))}
@@ -60,8 +60,7 @@ function StatePolygon({ state, selected, onClick }) {
   ]);
 
   const handleClick = () => {
-    const bounds = L.latLngBounds(coordinates);
-    map.fitBounds(bounds, { padding: [50, 50] });
+    map.fitBounds(coordinates);
     onClick(); // onClick to allow states to be selected
   };
 
@@ -108,7 +107,36 @@ function StatePolygon({ state, selected, onClick }) {
 
 export default function App() {
   const [selectedState, setSelectedState] = useState(null);
-  const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
+  const [wildfireData, setWildfireData] = useState([]);
+
+  useEffect(() => {
+    const fetchWildfireData = async (stateAbbreviation) => {
+      try {
+        console.log("abbrev: " + stateAbbreviation);
+        const response = await fetch(`./outdata/${stateAbbreviation}.csv`);
+        const data = await response.text();
+        console.log(data);
+        const parsedData = parseCSV(data);
+        setWildfireData(parsedData);
+      } catch (error) {
+        console.error('Error fetching wildfire data:', error);
+      }
+    };
+
+    if (selectedState !== null) {
+      const stateAbbreviation = stateAbbreviations[statesData.features[selectedState].properties.name];
+      console.log(stateAbbreviation)
+      fetchWildfireData(stateAbbreviation);
+    }
+  }, [selectedState]);
+
+  const parseCSV = (csvString) => {
+    return csvString.split('\n').map(line => {
+      const [latitude, longitude] = line.split(',').map(parseFloat);
+      return [latitude, longitude];
+    });
+  };
+
   const [mapType, setMapType] = useState("Satellite");
 
   const handleMapTypeChange = (value) => {
@@ -139,7 +167,7 @@ export default function App() {
           attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
-      <WildfireLayer /> {/* Render the WildfireLayer component */}
+        <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
 
       <RadioButtonsGroup /> 
       {statesData.features.map((state, index) => (
