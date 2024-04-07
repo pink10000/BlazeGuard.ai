@@ -143,7 +143,7 @@ export default function App() {
           attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
-      <WildfireLayer /> {/* Render the WildfireLayer component */}
+      <WildfireLayer /> 
       {statesData.features.map((state, index) => (
         <StatePolygon
           key={index}
