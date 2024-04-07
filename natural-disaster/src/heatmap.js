@@ -107,7 +107,6 @@ const firePredictions = [[-120.51104389,   39.09228626, 1],
 
 
 function Heater() {
-    const map = useMap();
     const heat = L.heatLayer(firePredictions, {
       radius: 20,
       blur: 15, 
