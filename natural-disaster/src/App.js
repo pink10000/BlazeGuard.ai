@@ -11,6 +11,7 @@ import InformationModal from "./StateHelpInfo";
 import Text from "./text";
 import { MapProvider } from "./MapContext";
 import FlyToLocation from "./FlyToLocation";
+import Heater from "./heatmap";
 
 
 const center = [40.63463151377654, -97.89969605983609];

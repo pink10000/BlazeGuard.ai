@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
-import 'leaflet.heat';
+// import "./leaflet-heat"
 
 // lat lng intensity of prediction
 const firePredictions = [[-120.51104389,   39.09228626, 1],
@@ -106,7 +106,7 @@ const firePredictions = [[-120.51104389,   39.09228626, 1],
 [-120.92720388,   39.30876626, 1]];
 
 
-function heater() {
+function Heater() {
     const map = useMap();
     const heat = L.heatLayer(firePredictions, {
       radius: 20,
@@ -120,7 +120,6 @@ function heater() {
           1.0: 'red'
       }
     });
-    heat.addTo(map);
   }
 
 export default Heater;
