@@ -4,7 +4,6 @@ import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
-import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
@@ -18,11 +17,10 @@ const maxBounds = [
 ];
 
 function WildfireLayer({ wildfireData }) {
-  const fireMarkerIcon = L.icon({
-    iconUrl: fireIcon,
-    iconSize: [32, 32], // Adjust the size of the icon as needed
-    iconAnchor: [16, 32], // Position the icon's anchor point
-    popupAnchor: [0, -32] // Position the popup relative to the icon
+  const pulseIcon = L.divIcon({
+    className: 'pulse-icon',
+    html: `<div class="pulse-ring"></div>`,
+    iconSize: [50,50], // Adjust the size of the pulsating circle as needed
   });
 
   return (
@@ -47,7 +45,7 @@ function WildfireLayer({ wildfireData }) {
       }}
     >
       {wildfireData.map((wildfire, index) => (
-        <Marker key={index} position={wildfire} icon={fireMarkerIcon}>
+        <Marker key={index} position={wildfire} icon={pulseIcon}>
         </Marker>
       ))}
     </MarkerClusterGroup>
@@ -178,8 +176,6 @@ export default function App() {
     </div>
 
       <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
-
-      <RadioButtonsGroup /> 
 
       {statesData.features.map((state, index) => (
         <StatePolygon
