@@ -1,0 +1,7 @@
+<<<<<<< HEAD
+data
+.venv
+=======
+# Nix result
+/result
+>>>>>>> 2f0877c (fix pkg lock)
