@@ -1,5 +1,6 @@
 # BlazeGuard.ai
-Run as a regular node React app, but add `--legacy-peers-deps` to every command, and then run `npm run start`.
+
+After cloning, cd into the natural-disaster directory and run `npm install --legacy-peer-deps` to install the packages (ignore any errors, it will still work). Then, run `npm run start` which will open a local copy of the website.
 
 ## Elevator Pitch
 
