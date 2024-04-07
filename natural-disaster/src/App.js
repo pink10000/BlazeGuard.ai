@@ -8,6 +8,7 @@ import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
+import Text from "./text";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -153,6 +154,9 @@ export default function App() {
      <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
         <RadioButtonsGroup onChange={handleMapTypeChange}/>
       </div>
+    <div style={{ position: "absolute", top: 15, right: 140, zIndex: 1001 }}>
+      <Text />
+    </div>
     <MapContainer
       center={center}
       zoom={4}
