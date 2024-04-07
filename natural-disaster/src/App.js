@@ -12,7 +12,7 @@ import Text from "./text";
 import { MapProvider } from "./MapContext";
 import FlyToLocation from "./FlyToLocation";
 import Heater from "./heatmap";
-import HeatmapLayer from 'react-leaflet-heatmap-layer-v3';
+import { HeatmapLayer } from 'react-leaflet-heatmap-layer-v3';
 
 
 const center = [40.63463151377654, -97.89969605983609];
@@ -205,22 +205,23 @@ export default function App() {
       style={{ width: "100vw", height: "100vh" }}
       zoomControl={false}
     >
+      {/* <Heater /> */}
+      <HeatmapLayer
+          points={wildfireData.map(point => ({lat: point[0], lng: point[1], intensity: point[2]}))}
+          longitudeExtractor={m => m.lng}
+          latitudeExtractor={m => m.lat}
+          intensityExtractor={m => parseFloat(m.intensity)}
+          radius={50}
+          blur={70}
+          max={0.9}
+        />
       <FlyToLocation lat={location.lat} lng={location.lng} />
       <TileLayer
           key={mapType}
           url={tileLayerUrl}
           attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
       />
-      {/* <Heater /> */}
-      <HeatmapLayer
-        points={wildfireData.map(point => [point.lat, point.lng, point.intensity])}
-        longitudeExtractor={point => point[1]}
-        latitudeExtractor={point => point[0]}
-        intensityExtractor={point => point[2]}
-        radius={20}
-        blur={15}
-        max={1.0}
-      />
+      
 
      <div style={{ position: "absolute", top: 100, left: 10, zIndex: 1000 }}>
       <InformationModal selectedItem={selectedState} />
