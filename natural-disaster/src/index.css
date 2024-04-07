@@ -34,6 +34,8 @@ code {
   background-color: lightgrey;
   padding: 10px;
   border-radius: 10px;
+  max-width: 25%;
+  max-height: 50%;
 }
 
 /* Form */

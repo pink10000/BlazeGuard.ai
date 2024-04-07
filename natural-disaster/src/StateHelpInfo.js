@@ -17,6 +17,15 @@ export default function InformationModal({ selectedItem, onClose }) {
               <li><a href="https://www.sandiego.gov/fire">Local Fire Department</a></li>
               <li><a href="https://readyforwildfire.org/prepare-for-wildfire/go-evacuation-guide/">Evacuation Routes</a></li>
             </ul>
+            <p>
+              Active information from <a href="https://www.nifc.gov/fire-information/nfn">National Interagency Fire Center</a>:
+            </p>
+            <p>April 5, 2024
+
+Currently, <b>three uncontained large fires</b> are burning in Alabama, Missouri and Florida. Wildland firefighters and support personnel contained 23 large fires this week. 
+
+To date, 8,433 wildfires have burned 1.7 million acres in the United States. The number of wildfires is slightly below the 10-year average, while the number of acres burned more than triple the average. 
+</p>
           </div>
         </div>
     );
