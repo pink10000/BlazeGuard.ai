@@ -52,27 +52,7 @@ function WildfireLayer() {
   );
 }
 
-function Button() {
-  const helloPopup = L.popup().setContent('Hello World!');
-  const map = useMap();
 
-  const handleClick = () => {
-    helloPopup.setLatLng(map.getCenter()).openOn(map);
-  };
-
-  return (
-    <button className="leaflet-bar leaflet-control leaflet-control-custom" onClick={handleClick} style={{
-      position: "absolute",
-      text: "hi",
-      top: "20px", // Adjust top position
-      right: "20px", // Adjust right position
-      zIndex: 1000, // Ensure the button appears above other elements on the map
-      fontSize: "20px", padding: "10px 20px"}}>
-      <i className="fa fa-globe"></i>
-      Button
-    </button>
-  );
-}
 
 function StatePolygon({ state, selected, onClick }) {
   const map = useMap();
@@ -150,7 +130,7 @@ export default function App() {
 
       <WildfireLayer /> {/* Render the WildfireLayer component */}
 
-      <Button />
+    
       {statesData.features.map((state, index) => (
         <StatePolygon
           key={index}

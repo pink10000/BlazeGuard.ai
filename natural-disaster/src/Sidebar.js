@@ -6,9 +6,16 @@ import "./App.css";
 import Button from '@mui/material/Button';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Divider from '@mui/material/Divider';
+import CheckboxLabels from './checkboxLabel';
 
 export default function Sidebar( {selectedStateInfo }) {
 
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
     return (
     <div>
@@ -32,7 +39,9 @@ export default function Sidebar( {selectedStateInfo }) {
             </Box>
           </ListItem> 
           <Divider variant="middle" />
+          <CheckboxLabels />
           <ListItem>
+            
           <Box 
           display="flex" 
           alignItems="left" 
@@ -41,14 +50,13 @@ export default function Sidebar( {selectedStateInfo }) {
             <Button variant="normal" startIcon={<MenuBookIcon />}>Resources</Button>
         </Box>
           </ListItem> 
-
           <ListItem>
           <Box 
           display="flex" 
           alignItems="left" 
           justifyContent="left"
           width="100%"> 
-            <Button variant="normal" startIcon={<AttachMoneyIcon />}>Donate</Button>
+            <Button variant="normal" startIcon={<AttachMoneyIcon />} onClick={handleOpen}>Donate</Button>
         </Box>
           </ListItem> 
         </List>
