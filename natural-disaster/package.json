@@ -12,11 +12,14 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "csv-parser": "^3.0.0",
     "leaflet": "^1.6.0",
     "leaflet-easybutton": "^2.4.0",
+    "leaflet.markercluster": "^1.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^3.2.0",
+    "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4"
@@ -37,5 +40,8 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "react-app-rewired": "^2.2.1"
+  }
 }

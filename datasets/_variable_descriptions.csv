@@ -1,0 +1,50 @@
+Table,Variable,Description
+Fires,FOD_ID,Unique numeric record identifier.
+Fires,FPA_ID,Unique identifier that contains information necessary to track back to the original record in the source dataset.
+Fires,SOURCE_SYSTEM_TYPE,"Type of source database or system that the record was drawn from (FED = federal, NONFED = nonfederal, or INTERAGCY = interagency)."
+Fires,SOURCE_SYSTEM,Name of or other identifier for source database or system that the record was drawn from. See \Supplements\FPA_FOD_source_list.pdf for a list of sources and their identifier and Short (2014) for additional source information.
+Fires,NWCG_REPORTING_AGENCY,"Active National Wildlife Coordinating Group (NWCG) Unit Identifier for the agency preparing the fire report (BIA = Bureau of Indian Affairs, BLM = Bureau of Land Management, BOR = Bureau of Reclamation, DOD = Department of Defense, DOE = Department of Energy, FS = Forest Service, FWS = Fish and Wildlife Service, IA = Interagency Organization, NPS = National Park Service, ST/C&L = State, County, or Local Organization, and TRIBE = Tribal Organization)."
+Fires,NWCG_REPORTING_UNIT_ID,Active NWCG Unit Identifier for the unit preparing the fire report.
+Fires,NWCG_REPORTING_UNIT_NAME,Active NWCG Unit Name for the unit preparing the fire report.
+Fires,SOURCE_REPORTING_UNIT,"Code for the agency unit preparing the fire report, based on code/name in the source dataset."
+Fires,SOURCE_REPORTING_UNIT_NAME,"Name of reporting agency unit preparing the fire report, based on code/name in the source dataset."
+Fires,LOCAL_FIRE_REPORT_ID,Number or code that uniquely identifies an incident report for a particular reporting unit and a particular calendar year.
+Fires,LOCAL_INCIDENT_ID,Number or code that uniquely identifies an incident for a particular local fire management organization within a particular calendar year.
+Fires,FIRE_CODE,Code used within the interagency wildland fire community to track and compile cost information for emergency fire suppression (https://www.firecode.gov/).
+Fires,FIRE_NAME,"Name of the incident, from the fire report (primary) or ICS-209 report (secondary)."
+Fires,ICS_209_PLUS_INCIDENT_JOIN_ID,Primary identifier needed to join into operational situation reporting data for the incident in the ICS-209-PLUS dataset.
+Fires,ICS_209_PLUS_COMPLEX_JOIN_ID,"If part of a complex, secondary identifier potentially needed to join to operational situation reporting data for the incident in the ICS-209-PLUS dataset."
+Fires,MTBS_ID,"Incident identifier, from the MTBS perimeter dataset."
+Fires,MTBS_FIRE_NAME,"Name of the incident, from the MTBS perimeter dataset."
+Fires,COMPLEX_NAME,"Name of the complex under which the fire was ultimately managed, when discernible."
+Fires,FIRE_YEAR,Calendar year in which the fire was discovered or confirmed to exist.
+Fires,DISCOVERY_DATE,Date on which the fire was discovered or confirmed to exist.
+Fires,DISCOVERY_DOY,Day of year on which the fire was discovered or confirmed to exist.
+Fires,DISCOVERY_TIME,Time of day that the fire was discovered or confirmed to exist.
+Fires,NWCG_CAUSE_CLASSIFICATION,"Broad classification of the reason the fire occurred (Human, Natural, Missing data/not specified/undetermined)."
+Fires,NWCG_GENERAL_CAUSE,"Event or circumstance that started a fire or set the stage for its occurrence (Arson/incendiarism, Debris and open burning, Equipment and vehicle use, Firearms and explosives use, Fireworks, Misuse of fire by a minor, Natural, Power generation/transmission/distribution, Railroad operations and maintenance, Recreation and ceremony, Smoking, Other causes, Missing data/not specified/undetermined)."
+Fires,NWCG_CAUSE_AGE_CATEGORY,"If cause attributed to children (ages 0-12) or adolescents (13-17), the value for this data element is set to Minor; otherwise null."
+Fires,CONT_DATE,"Date on which the fire was declared contained or otherwise controlled (mm/dd/yyyy where mm=month, dd=day, and yyyy=year)."
+Fires,CONT_DOY,Day of year on which the fire was declared contained or otherwise controlled.
+Fires,CONT_TIME,"Time of day that the fire was declared contained or otherwise controlled (hhmm where hh=hour, mm=minutes)."
+Fires,FIRE_SIZE,The estimate of acres within the final perimeter of the fire.
+Fires,FIRE_SIZE_CLASS,"Code for fire size based on the number of acres within the final fire perimeter (A=greater than 0 but less than or equal to 0.25 acres, B=0.26-9.9 acres, C=10.0-99.9 acres, D=100-299 acres, E=300 to 999 acres, F=1000 to 4999 acres, and G=5000+ acres)."
+Fires,LATITUDE,Latitude (NAD83) for point location of the fire (decimal degrees).
+Fires,LONGITUDE,Longitude (NAD83) for point location of the fire (decimal degrees).
+Fires,OWNER_DESCR,Name of primary owner or entity responsible for managing the land at the point of origin of the fire at the time of the incident.
+Fires,STATE,"Two-letter alphabetic code for the state in which the fire burned (or originated), based on the nominal designation in the fire report (not from a spatial overlay)."
+Fires,COUNTY,"County, or equivalent, in which the fire burned (or originated), based on nominal designation in the fire report (not from a spatial overlay)."
+Fires,FIPS_CODE,"Five-digit code from the Federal Information Process Standards (FIPS) publication 6-4 for representation of counties and equivalent entities, based on the nominal designation in the fire report (not from a spatial overlay)."
+Fires,FIPS_NAME,"County name from the FIPS publication 6-4 for representation of counties and equivalent entities, based on the nominal designation in the fire report (not from a spatial overlay)."
+NWCG_UnitIDActive_20200123,UnitId,NWCG Unit ID.
+NWCG_UnitIDActive_20200123,GeographicArea,"Two-letter code for the geographic area in which the unit is located (AK=Alaska, CA=California, EA=Eastern Area, GB=Great Basin, IN=International, NA=National, NR=Northern Rockies, NW=Northwest, RM=Rocky Mountain, SA=Southern Area, SW=Southwest)."
+NWCG_UnitIDActive_20200123,Gacc,"Seven or eight-letter code for the Geographic Area Coordination Center in which the unit is located or primarily affiliated with (CAMBCIFC=Canadian Interagency Forest Fire Centre, USAKCC=Alaska Interagency Coordination Center, USCAONCC=Northern California Area Coordination Center, USCAOSCC=Southern California Coordination Center, USCORMCC=Rocky Mountain Area Coordination Center, USGASAC=Southern Area Coordination Center, USIDNIC=National Interagency Coordination Center, USMTNRC=Northern Rockies Coordination Center, USNMSWC=Southwest Area Coordination Center, USORNWC=Northwest Area Coordination Center, USUTGBC=Western Great Basin Coordination Center, USWIEACC=Eastern Area Coordination Center)."
+NWCG_UnitIDActive_20200123,WildlandRole,Role of the unit within the wildland fire community.
+NWCG_UnitIDActive_20200123,UnitType,"Type of unit (e.g., federal, state, local)."
+NWCG_UnitIDActive_20200123,Department,"Department (or state/territory) to which the unit belongs (AK=Alaska, AL=Alabama, AR=Arkansas, AZ=Arizona, CA=California, CO=Colorado, CT=Connecticut, DE=Delaware, DHS=Department of Homeland Security, DOC= Department of Commerce, DOD=Department of Defense, DOE=Department of Energy, DOI= Department of Interior, DOL=Department of Labor, FL=Florida, GA=Georgia, IA=Iowa, IA/GC=Non-Departmental Agencies, ID=Idaho, IL=Illinois, IN=Indiana, KS=Kansas, KY=Kentucky, LA=Louisiana, MA=Massachusetts, MD=Maryland, ME=Maine, MI=Michigan, MN=Minnesota, MO=Missouri, MS=Mississippi, MT=Montana, NC=North Carolina, NE=Nebraska, NG=Non-Government, NH=New Hampshire, NJ=New Jersey, NM=New Mexico, NV=Nevada, NY=New York, OH=Ohio, OK=Oklahoma, OR=Oregon, PA=Pennsylvania, PR=Puerto Rico, RI=Rhode Island, SC=South Carolina, SD=South Dakota, ST/L=State or Local Government, TN=Tennessee, Tribe=Tribe, TX=Texas, USDA=Department of Agriculture, UT=Utah, VA=Virginia, VI=U.S. Virgin Islands, VT=Vermont, WA=Washington, WI=Wisconsin, WV=West Virginia, WY=Wyoming)."
+NWCG_UnitIDActive_20200123,Agency,"Agency or bureau to which the unit belongs (AG=Air Guard, ANC=Alaska Native Corporation, BIA=Bureau of Indian Affairs, BLM=Bureau of Land Management, BOEM=Bureau of Ocean Energy Management, BOR=Bureau of Reclamation, BSEE=Bureau of Safety and Environmental Enforcement, C&L=County & Local, CDF=California Department of Forestry & Fire Protection, DC=Department of Corrections, DFE=Division of Forest Environment, DFF=Division of Forestry Fire & State Lands, DFL=Division of Forests and Land, DFR=Division of Forest Resources, DL=Department of Lands, DNR=Department of Natural Resources, DNRC=Department of Natural Resources and Conservation, DNRF=Department of Natural Resources Forest Service, DOA=Department of Agriculture, DOC=Department of Conservation, DOE=Department of Energy, DOF=Department of Forestry, DVF=Division of Forestry, DWF=Division of Wildland Fire, EPA=Environmental Protection Agency, FC=Forestry Commission, FEMA=Federal Emergency Management Agency, FFC=Bureau of Forest Fire Control, FFP=Forest Fire Protection, FFS=Forest Fire Service, FR=Forest Rangers, FS=Forest Service, FWS=Fish & Wildlife Service, HQ=Headquarters, JC=Job Corps, NBC=National Business Center, NG=National Guard, NNSA=National Nuclear Security Administration, NPS=National Park Service, NWS=National Weather Service, OES=Office of Emergency Services, PRI=Private, SF=State Forestry, SFS=State Forest Service, SP=State Parks, TNC=The Nature Conservancy, USA=United States Army, USACE=United States Army Corps of Engineers, USAF=United States Air Force, USGS=United States Geological Survey, USN=United States Navy)."
+NWCG_UnitIDActive_20200123,Parent,Agency subgroup to which the unit belongs (A concatenation of State and Unit from this report - https://www.nifc.blm.gov/unit_id/publish/UnitIdReport.rtf).
+NWCG_UnitIDActive_20200123,Country,"Country in which the unit is located (e.g., US = United States)."
+NWCG_UnitIDActive_20200123,State,Two-letter code for the state in which the unit is located (or primarily affiliated).
+NWCG_UnitIDActive_20200123,Code,Unit code (follows state code to create UnitId).
+NWCG_UnitIDActive_20200123,Name,Unit name.
