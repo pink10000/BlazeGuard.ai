@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
+import Sidebar from "./Sidebar";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -20,7 +21,7 @@ function StatePolygon({ state, selected, onClick }) {
 
   const handleClick = () => {
     const bounds = L.latLngBounds(coordinates);
-    map.fitBounds(bounds);
+    map.fitBounds(bounds, { padding: [50, 50] });
     onClick(); // onClick to allow states to be selected
   };
 
@@ -67,8 +68,11 @@ function StatePolygon({ state, selected, onClick }) {
 
 export default function App() {
   const [selectedState, setSelectedState] = useState(null);
+  const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
 
   return (
+    <div>
+      <Sidebar selectedStateInfo={selectedStateInfo} />
     <MapContainer
       center={center}
       zoom={4}
@@ -91,5 +95,6 @@ export default function App() {
       ))}
       <ZoomControl position="topright" />
     </MapContainer>
+    </div>
   );
 }
