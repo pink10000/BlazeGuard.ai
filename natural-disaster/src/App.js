@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl} from "react-leaflet";
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
 import L from "leaflet";
 import fireIcon from './img/fire-icon-small.png';
-import latLongPairs from "./latLongPairs";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Sidebar from "./Sidebar";
+import { stateAbbreviations } from "./stateAbbreviations";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -15,7 +15,7 @@ const maxBounds = [
   [49.384358, -66.93457],
 ];
 
-function WildfireLayer() {
+function WildfireLayer({ wildfireData }) {
   const fireMarkerIcon = L.icon({
     iconUrl: fireIcon,
     iconSize: [32, 32], // Adjust the size of the icon as needed
@@ -44,33 +44,11 @@ function WildfireLayer() {
           className: 'mycluster', iconSize: L.point(40,40)});
       }}
     >
-      {latLongPairs.map((wildfire, index) => (
+      {wildfireData.map((wildfire, index) => (
         <Marker key={index} position={wildfire} icon={fireMarkerIcon}>
         </Marker>
       ))}
     </MarkerClusterGroup>
-  );
-}
-
-function Button() {
-  const helloPopup = L.popup().setContent('Hello World!');
-  const map = useMap();
-
-  const handleClick = () => {
-    helloPopup.setLatLng(map.getCenter()).openOn(map);
-  };
-
-  return (
-    <button className="leaflet-bar leaflet-control leaflet-control-custom" onClick={handleClick} style={{
-      position: "absolute",
-      text: "hi",
-      top: "20px", // Adjust top position
-      right: "20px", // Adjust right position
-      zIndex: 1000, // Ensure the button appears above other elements on the map
-      fontSize: "20px", padding: "10px 20px"}}>
-      <i className="fa fa-globe"></i>
-      Button
-    </button>
   );
 }
 
@@ -82,8 +60,7 @@ function StatePolygon({ state, selected, onClick }) {
   ]);
 
   const handleClick = () => {
-    const bounds = L.latLngBounds(coordinates);
-    map.fitBounds(bounds, { padding: [50, 50] });
+    map.fitBounds(coordinates);
     onClick(); // onClick to allow states to be selected
   };
 
@@ -99,29 +76,6 @@ function StatePolygon({ state, selected, onClick }) {
       }}
       positions={coordinates}
       eventHandlers={{
-        mouseover: (e) => {
-          const layer = e.target;
-          if (!selected) {
-          layer.setStyle({
-            dashArray: "",
-            opacity: 1,
-            color: "white",
-            fillColor: "#808080",
-            weight: 2,
-            fillOpacity: 0.7,
-          });
-          }
-        },
-        mouseout: (e) => {
-          const layer = e.target;
-          layer.setStyle({
-            weight: 2,
-            dashArray: "3",
-            color: "white",
-            fillColor: selected ? "transparent" : "#007bff",
-            fillOpacity: selected ? 0 : 0.7,
-          });
-        },
         click: handleClick,
       }}
     />
@@ -130,37 +84,67 @@ function StatePolygon({ state, selected, onClick }) {
 
 export default function App() {
   const [selectedState, setSelectedState] = useState(null);
+  const [wildfireData, setWildfireData] = useState([]);
+
+  useEffect(() => {
+    const fetchWildfireData = async (stateAbbreviation) => {
+      try {
+        console.log("abbrev: " + stateAbbreviation);
+        const response = await fetch(`./outdata/${stateAbbreviation}.csv`);
+        const data = await response.text();
+        console.log(data);
+        const parsedData = parseCSV(data);
+        setWildfireData(parsedData);
+      } catch (error) {
+        console.error('Error fetching wildfire data:', error);
+      }
+    };
+
+    if (selectedState !== null) {
+      const stateAbbreviation = stateAbbreviations[statesData.features[selectedState].properties.name];
+      console.log(stateAbbreviation)
+      fetchWildfireData(stateAbbreviation);
+    }
+  }, [selectedState]);
+
+  const parseCSV = (csvString) => {
+    return csvString.split('\n').map(line => {
+      const [latitude, longitude] = line.split(',').map(parseFloat);
+      return [latitude, longitude];
+    });
+  };
+
   const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
 
   return (
     <div>
       <Sidebar selectedStateInfo={selectedStateInfo} />
-    <MapContainer
-      center={center}
-      zoom={4}
-      minZoom={4}
-      maxBounds={maxBounds}
-      style={{ width: "100vw", height: "100vh" }}
-      zoomControl={false}
-    >
-      <TileLayer
-        url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL"
-        attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-      />
-
-      <WildfireLayer /> {/* Render the WildfireLayer component */}
-
-      <Button />
-      {statesData.features.map((state, index) => (
-        <StatePolygon
-          key={index}
-          state={state}
-          selected={index === selectedState}
-          onClick={() => setSelectedState(index)}
+      <MapContainer
+        center={center}
+        zoom={4}
+        minZoom={4}
+        maxBounds={maxBounds}
+        style={{ width: "100vw", height: "100vh" }}
+        zoomControl={false}
+      >
+        <TileLayer
+          url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL"
+          attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         />
-      ))}
-      <ZoomControl position="topright" />
-    </MapContainer>
+
+        <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
+
+        {statesData.features.map((state, index) => (
+          <StatePolygon
+            key={index}
+            state={state}
+            selected={index === selectedState}
+            onClick={() => setSelectedState(index)}
+          />
+        ))}
+
+        <ZoomControl position="topright" />
+      </MapContainer>
     </div>
   );
 }
