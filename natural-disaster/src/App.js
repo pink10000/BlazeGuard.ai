@@ -187,6 +187,7 @@ export default function App() {
   return (
 
     <div>
+    <script src="leaflet-heat.js"></script>
      <div class="" style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
         <RadioButtonsGroup onChange={handleMapTypeChange}/>
       </div>
@@ -207,8 +208,8 @@ export default function App() {
           key={mapType}
           url={tileLayerUrl}
           attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        />
-
+      />
+      <Heater />
 
      <div style={{ position: "absolute", top: 100, left: 10, zIndex: 1000 }}>
       <InformationModal selectedItem={selectedState} />
