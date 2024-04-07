@@ -27,10 +27,10 @@ function StatePolygon({ state, selected, onClick }) {
   return (
     <Polygon
       pathOptions={{
-        fillOpacity: 0.7,
+        fillOpacity: selected ? 0 : 0.6, // no fill if state is selected
         opacity: 1,
         color: "white",
-        fillColor: selected ? "#ADD8E6" : "#007bff",
+        fillColor: selected ? "transparent" : "#007bff",
         weight: 2,
         dashArray: 3,
       }}
@@ -38,6 +38,7 @@ function StatePolygon({ state, selected, onClick }) {
       eventHandlers={{
         mouseover: (e) => {
           const layer = e.target;
+          if (!selected) {
           layer.setStyle({
             dashArray: "",
             opacity: 1,
@@ -46,6 +47,7 @@ function StatePolygon({ state, selected, onClick }) {
             weight: 2,
             fillOpacity: 0.7,
           });
+          }
         },
         mouseout: (e) => {
           const layer = e.target;
@@ -53,8 +55,8 @@ function StatePolygon({ state, selected, onClick }) {
             weight: 2,
             dashArray: "3",
             color: "white",
-            fillColor: selected ? "#ADD8E6" : "#007bff",
-            fillOpacity: 0.7,
+            fillColor: selected ? "transparent" : "#007bff",
+            fillOpacity: selected ? 0 : 0.7,
           });
         },
         click: handleClick,
