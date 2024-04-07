@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMap, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
@@ -75,6 +75,7 @@ export default function App() {
       minZoom={4}
       maxBounds={maxBounds}
       style={{ width: "100vw", height: "100vh" }}
+      zoomControl={false}
     >
       <TileLayer
         url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL"
@@ -88,6 +89,7 @@ export default function App() {
           onClick={() => setSelectedState(index)}
         />
       ))}
+      <ZoomControl position="topright" />
     </MapContainer>
   );
 }
