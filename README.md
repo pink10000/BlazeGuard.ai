@@ -1,4 +1,4 @@
-# crying-irl
+# BlazeGuard.ai
 Run as a regular node React app, but add `--legacy-peers-deps` to every command, and then run `npm run start`.
 
 ## Elevator Pitch
