@@ -8,6 +8,7 @@ import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Sidebar from "./Sidebar";
 import { stateAbbreviations } from "./stateAbbreviations";
+import RadioButtonsGroup from "./Radio";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -67,7 +68,7 @@ function StatePolygon({ state, selected, onClick }) {
   return (
     <Polygon
       pathOptions={{
-        fillOpacity: selected ? 0 : 0.6, // no fill if state is selected
+        fillOpacity: selected ? 0 : 0.3, // no fill if state is selected
         opacity: 1,
         color: "white",
         fillColor: selected ? "transparent" : "#007bff",
@@ -76,6 +77,29 @@ function StatePolygon({ state, selected, onClick }) {
       }}
       positions={coordinates}
       eventHandlers={{
+        mouseover: (e) => {
+          const layer = e.target;
+          if (!selected) {
+          layer.setStyle({
+            dashArray: "",
+            opacity: 1,
+            color: "white",
+            fillColor: "#808080",
+            weight: 2,
+            fillOpacity: 0.3,
+          });
+          }
+        },
+        mouseout: (e) => {
+          const layer = e.target;
+          layer.setStyle({
+            weight: 2,
+            dashArray: "3",
+            color: "white",
+            fillColor: selected ? "transparent" : "#007bff",
+            fillOpacity: selected ? 0 : 0.3,
+          });
+        },
         click: handleClick,
       }}
     />
@@ -115,36 +139,49 @@ export default function App() {
   };
 
   const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
+  const [mapType, setMapType] = useState("Satellite");
+
+  const handleMapTypeChange = (value) => {
+    setMapType(value);
+  };
+
+  const tileLayerUrl =
+    mapType === "Satellite"
+      ? "https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=SBZhTEOwJUIIKTs8PQRL"
+      : "https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL";
 
   return (
     <div>
-      <Sidebar selectedStateInfo={selectedStateInfo} />
-      <MapContainer
-        center={center}
-        zoom={4}
-        minZoom={4}
-        maxBounds={maxBounds}
-        style={{ width: "100vw", height: "100vh" }}
-        zoomControl={false}
-      >
-        <TileLayer
-          url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL"
-          attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+     <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
+        <RadioButtonsGroup onChange={handleMapTypeChange}/>
+      </div>
+    <MapContainer
+      center={center}
+      zoom={4}
+      minZoom={4}
+      maxBounds={maxBounds}
+      style={{ width: "100vw", height: "100vh" }}
+      zoomControl={false}
+    >
+      <TileLayer
+          key={mapType}
+          url={tileLayerUrl}
+          attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
         <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
 
-        {statesData.features.map((state, index) => (
-          <StatePolygon
-            key={index}
-            state={state}
-            selected={index === selectedState}
-            onClick={() => setSelectedState(index)}
-          />
-        ))}
-
-        <ZoomControl position="topright" />
-      </MapContainer>
+      <RadioButtonsGroup /> 
+      {statesData.features.map((state, index) => (
+        <StatePolygon
+          key={index}
+          state={state}
+          selected={index === selectedState}
+          onClick={() => setSelectedState(index)}
+        />
+      ))}
+      <ZoomControl position="topleft" />
+    </MapContainer>
     </div>
   );
 }
