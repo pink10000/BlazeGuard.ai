@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
@@ -10,6 +10,9 @@ import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
 import InformationModal from "./StateHelpInfo";
 import Text from "./text";
+import { MapProvider } from "./MapContext";
+import FlyToLocation from "./FlyToLocation";
+
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -110,14 +113,19 @@ function StatePolygon({ state, selected, onClick }) {
 export default function App() {
   const [selectedState, setSelectedState] = useState(null);
   const [wildfireData, setWildfireData] = useState([]);
+  const [location, setLocation] = useState({ lat: null, lng: null });
 
+
+  const handlePlaceSelected = useCallback((lat, lng) => {
+    setLocation({ lat, lng });
+  }, []);
+  
   useEffect(() => {
     const fetchWildfireData = async (stateAbbreviation) => {
       try {
         console.log("abbrev: " + stateAbbreviation);
         const response = await fetch(`./outdata-short/${stateAbbreviation}.csv`);
         const data = await response.text();
-        // console.log(data);
         const parsedData = parseCSV(data);
         setWildfireData(parsedData);
       } catch (error) {
@@ -151,14 +159,16 @@ export default function App() {
       : "https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL";
 
   return (
+
     <div>
      <div class="" style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
         <RadioButtonsGroup onChange={handleMapTypeChange}/>
       </div>
     <div class="form" style={{ position: "absolute", top: 15, right: 140, zIndex: 1001 }}>
-      <Text />
+      <Text onPlaceSelected={handlePlaceSelected}/>
     </div>
     <MapContainer
+  
       center={center}
       zoom={4}
       minZoom={4}
@@ -166,6 +176,7 @@ export default function App() {
       style={{ width: "100vw", height: "100vh" }}
       zoomControl={false}
     >
+      <FlyToLocation lat={location.lat} lng={location.lng} />
       <TileLayer
           key={mapType}
           url={tileLayerUrl}
@@ -178,8 +189,6 @@ export default function App() {
     </div>
 
       <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
-
-      <RadioButtonsGroup /> 
 
       {statesData.features.map((state, index) => (
         <StatePolygon
