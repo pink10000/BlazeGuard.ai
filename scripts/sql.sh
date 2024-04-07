@@ -18,5 +18,5 @@ for STATE in $STATES; do
     fi
 
     # Query to select records by state and export to CSV
-    sqlite3 -header -csv "$DB_FILE" "SELECT * FROM Fires WHERE STATE = '$STATE_TRIMMED';" > "./state_fires/${STATE_TRIMMED}.csv"
+    sqlite3 -header -csv "$DB_FILE" "SELECT * FROM Fires WHERE STATE = '$STATE_TRIMMED' AND FIRE_YEAR > 2018;" > "./state_fires/${STATE_TRIMMED}.csv"
 done

@@ -8,6 +8,7 @@ import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
+import InformationModal from "./StateHelpInfo";
 import Text from "./text";
 
 const center = [40.63463151377654, -97.89969605983609];
@@ -116,7 +117,7 @@ export default function App() {
         console.log("abbrev: " + stateAbbreviation);
         const response = await fetch(`./outdata/${stateAbbreviation}.csv`);
         const data = await response.text();
-        console.log(data);
+        // console.log(data);
         const parsedData = parseCSV(data);
         setWildfireData(parsedData);
       } catch (error) {
@@ -171,9 +172,15 @@ export default function App() {
           attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
-        <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
+
+     <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
+      <InformationModal selectedItem={selectedState} />
+    </div>
+
+      <WildfireLayer wildfireData={wildfireData} /> {/* Pass wildfireData to WildfireLayer component */}
 
       <RadioButtonsGroup /> 
+
       {statesData.features.map((state, index) => (
         <StatePolygon
           key={index}
