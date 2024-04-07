@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon, useMap, Marker} from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMap, Marker, ZoomControl} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "./data";
 import "./App.css";
@@ -7,7 +7,7 @@ import L from "leaflet";
 import fireIcon from './img/fire-icon-small.png';
 import latLongPairs from "./latLongPairs";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-
+import Sidebar from "./Sidebar";
 
 const center = [40.63463151377654, -97.89969605983609];
 const maxBounds = [
@@ -83,17 +83,17 @@ function StatePolygon({ state, selected, onClick }) {
 
   const handleClick = () => {
     const bounds = L.latLngBounds(coordinates);
-    map.fitBounds(bounds);
+    map.fitBounds(bounds, { padding: [50, 50] });
     onClick(); // onClick to allow states to be selected
   };
 
   return (
     <Polygon
       pathOptions={{
-        fillOpacity: 0.7,
+        fillOpacity: selected ? 0 : 0.6, // no fill if state is selected
         opacity: 1,
         color: "white",
-        fillColor: selected ? "#ADD8E6" : "#007bff",
+        fillColor: selected ? "transparent" : "#007bff",
         weight: 2,
         dashArray: 3,
       }}
@@ -101,6 +101,7 @@ function StatePolygon({ state, selected, onClick }) {
       eventHandlers={{
         mouseover: (e) => {
           const layer = e.target;
+          if (!selected) {
           layer.setStyle({
             dashArray: "",
             opacity: 1,
@@ -109,6 +110,7 @@ function StatePolygon({ state, selected, onClick }) {
             weight: 2,
             fillOpacity: 0.7,
           });
+          }
         },
         mouseout: (e) => {
           const layer = e.target;
@@ -116,8 +118,8 @@ function StatePolygon({ state, selected, onClick }) {
             weight: 2,
             dashArray: "3",
             color: "white",
-            fillColor: selected ? "#ADD8E6" : "#007bff",
-            fillOpacity: 0.7,
+            fillColor: selected ? "transparent" : "#007bff",
+            fillOpacity: selected ? 0 : 0.7,
           });
         },
         click: handleClick,
@@ -128,14 +130,18 @@ function StatePolygon({ state, selected, onClick }) {
 
 export default function App() {
   const [selectedState, setSelectedState] = useState(null);
+  const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
 
   return (
+    <div>
+      <Sidebar selectedStateInfo={selectedStateInfo} />
     <MapContainer
       center={center}
       zoom={4}
       minZoom={4}
       maxBounds={maxBounds}
       style={{ width: "100vw", height: "100vh" }}
+      zoomControl={false}
     >
       <TileLayer
         url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=SBZhTEOwJUIIKTs8PQRL"
@@ -153,6 +159,8 @@ export default function App() {
           onClick={() => setSelectedState(index)}
         />
       ))}
+      <ZoomControl position="topright" />
     </MapContainer>
+    </div>
   );
 }
