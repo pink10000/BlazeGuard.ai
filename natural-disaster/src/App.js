@@ -6,7 +6,6 @@ import "./App.css";
 import L from "leaflet";
 import fireIcon from './img/fire-icon-small.png';
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import Sidebar from "./Sidebar";
 import { stateAbbreviations } from "./stateAbbreviations";
 import RadioButtonsGroup from "./Radio";
 
@@ -138,7 +137,6 @@ export default function App() {
     });
   };
 
-  const selectedStateInfo = selectedState != null ? statesData.features[selectedState].properties : null;
   const [mapType, setMapType] = useState("Satellite");
 
   const handleMapTypeChange = (value) => {
