@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import "./App.css";
 import Button from '@mui/material/Button';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import Divider from '@mui/material/Divider';
 
 export default function Sidebar( {selectedStateInfo }) {
 
@@ -30,7 +31,7 @@ export default function Sidebar( {selectedStateInfo }) {
             />
             </Box>
           </ListItem> 
-          <hr />
+          <Divider variant="middle" />
           <ListItem>
           <Box 
           display="flex" 
