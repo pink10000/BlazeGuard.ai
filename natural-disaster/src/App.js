@@ -141,19 +141,19 @@ export default function App() {
     setLocation({ lat, lng });
   }, []);
   
-  useEffect(() => {
-    const fetchWildfireData = async (stateAbbreviation) => {
-      try {
-        // console.log("abbrev: " + stateAbbreviation);
-        const response = await fetch(`./outdata-short-with-metadata/${stateAbbreviation}.csv`);
-        const data = await response.text();
-        const parsedData = parseCSV(data);
-        setWildfireData(parsedData);
-      } catch (error) {
-        console.error('Error fetching wildfire data:', error);
-      }
-    };
+  const fetchWildfireData = async (stateAbbreviation) => {
+    try {
+      // console.log("abbrev: " + stateAbbreviation);
+      const response = await fetch(`./outdata-short-with-metadata/${stateAbbreviation}.csv`);
+      const data = await response.text();
+      const parsedData = parseCSV(data);
+      setWildfireData(parsedData);
+    } catch (error) {
+      console.error('Error fetching wildfire data:', error);
+    }
+  };
 
+  useEffect(() => {
     if (selectedState !== null) {
       const stateAbbreviation = stateAbbreviations[statesData.features[selectedState].properties.name];
       // console.log(stateAbbreviation)
